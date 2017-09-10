@@ -22,9 +22,11 @@ class ChartBase extends Component {
     }
     render() {
         return (
-            <div ref="chart" className="report-chart-content" style={{ ...this.props.style }}></div>
+            <div ref="chart" className={this.props.cls} style={{ ...this.props.style }}></div>
         )
     }
 }
-
+ChartBase.defaultProps = {
+    cls: 'report-chart-content'  
+ }
 export default ChartBase

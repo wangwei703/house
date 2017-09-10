@@ -49,16 +49,22 @@ class Report extends Component {
             message.error(typeof e === "string" ? e : '加载数据文件失败');
         });
     }
+    getCardRepot(json){
+        return Object.entries(json.source).map(s=>{
+            let sk=s[0],sn=s[1];
+            let rptdata=json.data.find(d=>d.s===sk);
+            return <RealTimeRpt key={sk} name={sn} rptdata={rptdata} style={{ height: '100%', width: "100%",margin:0,paddingTop:".8rem" }} />
+        });
+    }
     render() {
         return (
             <div className="report-main">
                 <Row gutter={16} style={{flex:1}}>
                     {
                         this.state.day.map(c => {
-                            return <Col span={8}>
+                            return <Col key={c.key} span={8}>
                                 <Card title={c.name} bordered={false} bodyStyle={{padding:0}}>
-                                    <RealTimeRpt key={c.key} name={c.name} rptdata={c.data} style={{ height: '100%', width: "100%",margin:0 }} />
-                                    <RealTimeRpt key={c.key+"-1"} name={c.name} rptdata={c.data} style={{ height: '100%', width: "100%",margin:0 }} />
+                                    {this.getCardRepot(c.data)}
                                 </Card>
                             </Col>
                         })
