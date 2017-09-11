@@ -33,6 +33,16 @@ class AvgPrice extends ChartBase {
     }
     buildChartOptions(title, data) {
         let { x, l, s } = this.format(data);
+        let scatter =[];
+         x.forEach(_x => {
+            let rnd = Math.round(Math.random() * 100);
+            for (let i = 0; i < rnd; i++) {
+                scatter.push({
+                    value:[_x, 10000 + Math.round(Math.random() * 10000)],
+                    symbolOffset:[2*(3-i%5),0]
+                });
+            }
+        });
         let series = s.map(getLineSeries),
             xAxis = getX({
                 data: x
@@ -44,6 +54,21 @@ class AvgPrice extends ChartBase {
                     formatter: '{value} ￥'
                 }
             })];
+        series.push({
+            name:"安居客",
+            type: 'scatter',
+            data: scatter,
+            symbolSize: 2,
+            hoverAnimation:false,
+            legendHoverLink:false,
+            silent:true,
+            itemStyle: {
+                normal: {
+                    opacity:.8
+                }
+            }
+        });
+        console.log(series);
         let opts = getOptions({
             title: getTitle(title),
             toolbox: getToolbox(),

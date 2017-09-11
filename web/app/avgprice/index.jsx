@@ -45,7 +45,7 @@ class componentName extends Component {
             <div className="report-main">
                 {
                     this.state.community.map(c => {
-                        return <AvgPrice key={c.key} name={c.name} rptdata={c.data} />
+                        return <AvgPrice key={c.key} name={c.name} rptdata={c.data} style={{minHeight:"30rem"}}/>
                     })
                 }
             </div>

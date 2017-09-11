@@ -98,6 +98,7 @@ class Home extends Component {
             },
             labelNormal: (v, p, c) => {
                 if (typeof v === "number" && typeof p === "number") {
+                    p = p < 0 ? p : `+${p}`;
                     return this.dataLabel(`\n\n\n\n\n\n￥${v}/${p}%`, "#4a667a", 16);
                 } else if (typeof v === "number") {
                     return this.dataLabel(`\n\n\n\n\n\n￥${v}/--`, "#4a667a", 16);
