@@ -21,11 +21,12 @@ export default class App extends Component {
           <Header />
           <Content>
             <Switch>
+              <Route exact path="/" component={HOME} />
               <Route exact path="/home" component={HOME} />
               <Route exact path="/avgprice" component={AvgPrice} />
               <Route exact path="/avgpricemon" component={AvgPriceMon} />
               <Route exact path="/quantity" component={Quantity} />
-              <Redirect from='/' to='/avgprice' />
+              {/* <Redirect from='/' to='/home' /> */}
             </Switch>
           </Content>
         </Layout>
