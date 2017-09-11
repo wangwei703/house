@@ -212,8 +212,9 @@ function quantity(houseList) {
 
 function home(houseList, trend) {
     let commArr = Array.from(commMap),
-        dateArr = Array.from(dateSet),
-        today = dateArr.pop(),
+        dateArr = Array.from(dateSet);
+    dateArr.sort((d1, d2) => d1 > d2 ? 1 : (d1 < d2 ? -1 : 0));
+    let today = dateArr.pop(),
         yesterday = dateArr.pop(),
         dayData = [],
         monData = [];
