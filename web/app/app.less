@@ -134,16 +134,17 @@ body {
     &:extend(.flex-column);
     background-color: rgba(0, 0, 0, .1);
     margin: .5rem;
+    height: ~"calc(50% - 1rem)"!important;
+    min-height: 25rem;
     .home-rpt-card-title {
         color: #4a667a;
         font-size: 22px;
-        padding: .8rem 0;
+        padding-top: .8rem;
         text-align: center;
     }
     .home-rpt-card-body {
         flex: 1;
         display: flex;
-        height: 23rem;
     }
 }
 

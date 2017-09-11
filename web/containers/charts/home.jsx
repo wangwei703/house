@@ -34,11 +34,11 @@ class Home extends Component {
                     color: 'rgba(44,59,70,1)'//未完成的圆环的颜色
                 }
             };
+        console.log(data);
         let val = data.v,
-            p = Math.floor(data.p * 10000) / 100,
-            labelColor = p > 0 ? "#48c15e" : "#ef6670",
-            v = Math.min(100, Math.floor(val / 200));
-        p = p < 0 ? p : `+${p}`;
+            p = data.p ? Math.floor(data.p * 10000) / 100 : null,
+            labelColor = p ? (p > 0 ? "#48c15e" : "#ef6670") : "#000",
+            v = val ? Math.min(100, Math.floor(val / 200)):0;
         delete option.itemStyle;
         let labelNormal = option.labelNormal(val, p, labelColor);//:`${val} ￥(${p}%)`;
         delete option.labelNormal;
@@ -73,7 +73,16 @@ class Home extends Component {
                     shadowBlur: 5
                 }
             },
-            labelNormal: (v, p, c) => this.dataLabel(`￥${v}/${p}%`, c, 28)
+            labelNormal: (v, p, c) => {
+                if (typeof v === "number" && typeof p === "number") {
+                    p = p < 0 ? p : `+${p}`;
+                    return this.dataLabel(`￥${v}/${p}%`, c, 28);
+                } else if (typeof v === "number") {
+                    return this.dataLabel(`￥${v}/--`, c, 28);
+                } else {
+                    return this.dataLabel(null, c, 28);
+                }
+            }
         })
     }
     formatMonSeries(data) {
@@ -87,14 +96,23 @@ class Home extends Component {
                     shadowBlur: 5
                 }
             },
-            labelNormal: (v, p, c) => this.dataLabel(`\n\n\n\n\n\n￥${v}/${p}%`, "#4a667a", 16)
+            labelNormal: (v, p, c) => {
+                if (typeof v === "number" && typeof p === "number") {
+                    return this.dataLabel(`\n\n\n\n\n\n￥${v}/${p}%`, "#4a667a", 16);
+                } else if (typeof v === "number") {
+                    return this.dataLabel(`\n\n\n\n\n\n￥${v}/--`, "#4a667a", 16);
+                } else {
+                    return this.dataLabel(null, "#4a667a", 16);
+                }
+
+            }
         })
     }
     dataLabel(text, color, fontSize) {
         return {
             formatter: text,
             position: 'center',
-            show: true,
+            show: !!text,
             lineHeight: 86,
             textStyle: {
                 fontSize,
@@ -142,8 +160,8 @@ class Home extends Component {
                     fontSize: 16
                 }
             },
-            legend:getLegend( {
-                top:15,
+            legend: getLegend({
+                top: 15,
                 data: ["当日均价", "当月均价"]
             }),
             series

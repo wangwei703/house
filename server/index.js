@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require("path");
+const dateComm = require("./date");
 const SOURCE = {
     ajk: "安居客",
     fccs: "房产超市"
@@ -17,7 +18,7 @@ let Trend = [];
 
 function write(name, list) {
     var txt = JSON.stringify(list); // "module.exports=" + JSON.stringify( points );
-    fs.writeFile(path.resolve(__dirname, `../web/libs/data/${name}.json`), txt, function(err) {
+    fs.writeFile(path.resolve(__dirname, `../web/libs/data/${name}.json`), txt, function (err) {
         if (err)
             console.log("\tfail " + err);
         else {
@@ -42,12 +43,7 @@ function read(src) {
             commMap.set(k, name);
             let house = data.list.map(h => {
                 let date = new Date(h.date),
-                    year = date.getFullYear(),
-                    mon = date.getMonth() + 1,
-                    day = date.getDate(),
-                    fullMon = mon > 9 ? mon : (`0${mon}`),
-                    fullDay = day > 9 ? day : (`0${day}`),
-                    dateStr = `${year}-${fullMon}-${fullDay}`;
+                    dateStr = dateComm.formatYMD(date);
                 dateSet.add(dateStr);
                 return {
                     src,
@@ -212,14 +208,12 @@ function quantity(houseList) {
 
 function home(houseList, trend) {
     let commArr = Array.from(commMap),
-        dateArr = Array.from(dateSet);
-    dateArr.sort((d1, d2) => d1 > d2 ? 1 : (d1 < d2 ? -1 : 0));
-    let today = dateArr.pop(),
-        yesterday = dateArr.pop(),
+        today = dateComm.today(),
+        yesterday = dateComm.yesterday(),
         dayData = [],
         monData = [];
     let getAvg = arr => {
-        let avg = 0,
+        let avg,
             len = arr.length;
         if (len > 0) {
             let sum = arr.reduce((a, b) => a + b.u, 0);
@@ -242,46 +236,47 @@ function home(houseList, trend) {
     commArr.forEach(cm => {
         Object.keys(SOURCE).forEach(sk => {
             let todayList = houseList.filter(h => {
-                    return h.src === sk && h.k === cm[0] && h.d === today
-                }),
+                return h.src === sk && h.k === cm[0] && h.d === today
+            }),
                 yesterdayList = houseList.filter(h => {
                     return h.src === sk && h.k === cm[0] && h.d === yesterday
                 });
             let todayAvg = getAvg(todayList);
-            if (todayAvg > 0) {
-                let yesterdayAvg = getAvg(yesterdayList),
-                    per = getPercent(yesterdayAvg, todayAvg);
-                dayData.push({
-                    s: sk,
-                    c: cm[0],
-                    a: todayAvg,
-                    p: per
-                });
-            }
-            let now = new Date(),
-                mon = `${now.getFullYear()}${getMonthStr(now)}`;
-            now.setMonth(now.getMonth() - 1);
-            let lastMon = `${now.getFullYear()}${getMonthStr(now)}`;
-            tData = trend.find(t => {
-                return t.src === sk && t.k === cm[0]
+            let yesterdayAvg = getAvg(yesterdayList),
+                per = getPercent(yesterdayAvg, todayAvg);
+            dayData.push({
+                s: sk,
+                c: cm[0],
+                a: todayAvg,
+                p: per,
+                today
             });
+
+            let mon = dateComm.mon(),
+                lastMon = dateComm.lastMon(),
+                monAvg,
+                monPre,
+                tData = trend.find(t => {
+                    return t.src === sk && t.k === cm[0]
+                });
             if (tData) {
                 let _trend = tData["t"];
                 if (_trend) {
-                    let monAvg = _trend[mon] || 0;
+                    monAvg = parseInt(_trend[mon] || 0,10),
+                    lastMonAvg = 0;
                     if (monAvg) {
-                        let lastMonAvg = _trend[lastMon] || 0,
-                            per = getPercent(lastMonAvg, monAvg);
-                        monData.push({
-                            s: sk,
-                            c: cm[0],
-                            a: monAvg,
-                            p: per
-                        });
+                        lastMonAvg = _trend[lastMon] || 0,
+                            monPre = getPercent(lastMonAvg, monAvg);
                     }
-
                 }
             }
+            monData.push({
+                s: sk,
+                c: cm[0],
+                a: monAvg,
+                p: monPre,
+                mon
+            });
         });
     });
 

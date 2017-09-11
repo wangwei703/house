@@ -8,9 +8,9 @@ function writeData(list) {
             console.log("\tfail " + err);
         else {
             console.log("\t写入文件ok");
-            console.log("\t统计");
-            readData();
-            console.log("\t统计ok");
+            // console.log("\t统计");
+            // readData();
+            // console.log("\t统计ok");
         }
     });
 }
