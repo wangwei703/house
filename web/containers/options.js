@@ -2,7 +2,7 @@ import extend from './extend';
 
 const color = "#eee";
 const legendColor = "#eee";
-const bgColor = "transparent";//rgba(0,0,0,.1)";
+const bgColor = "transparent"; //rgba(0,0,0,.1)";
 const titleColor = "#4a667a";
 const subTitleColor = "#526e82";
 const axisLabelColor = subTitleColor;
@@ -38,7 +38,7 @@ export function getToolbox() {
 }
 export function getX(x) {
     return extend(true, {}, {
-        splitLine: {//网格线
+        splitLine: { //网格线
             show: false
         },
         axisLine: {
@@ -80,12 +80,12 @@ export function getY(y) {
                 opacity: 0.4
             }
         },
-        splitLine: {//网格线
+        splitLine: { //网格线
             show: false
         }
     }, y);
 }
-export function getLineSeries(s,order=0) {
+export function getLineSeries(s, order = 0) {
     let markPointData = [];
     s.data.forEach((d, idx) => {
         if (idx > 0) {
@@ -121,16 +121,16 @@ export function getLineSeries(s,order=0) {
                 shadowOffsetY: 5
             }
         },
-        animationDelay: function (idx) {
-             return idx * 10+(order*100);
+        animationDelay: function(idx) {
+            return idx * 10 + (order * 100);
         }
     }, s);
 }
-export function getBarSeries(s,order=0) {
+export function getBarSeries(s, order = 0) {
     return extend(true, {}, {
         type: 'bar',
         barWidth: 10,
-        barGap: 0,//柱间距离
+        barGap: 0, //柱间距离
         label: {
             normal: {
                 show: true,
@@ -144,8 +144,8 @@ export function getBarSeries(s,order=0) {
                 opacity: 1
             }
         },
-        animationDelay: function (idx) {
-            return idx * 10+(order*100);
+        animationDelay: function(idx) {
+            return idx * 10 + (order * 100);
         }
     }, s);
 }
@@ -163,13 +163,12 @@ export function getOptions(opts) {
             bottom: 60
         },
         animationEasing: 'elasticOut',
-        animationDelayUpdate: function (idx) {
+        animationDelayUpdate: function(idx) {
             return idx * 5;
         },
-        textStyle:{
-            fontSize:14
+        textStyle: {
+            fontSize: 14
         }
 
     }, opts);
 }
-

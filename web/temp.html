@@ -1,46 +1,46 @@
 <!DOCTYPE html>
 <html>
 
-    <head>
-        <meta charset='UTF-8' />
-        <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"></link>
-        <!-- <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1,user-scalable=no"></meta> -->
+<head>
+    <meta charset='UTF-8' />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"></link>
+    <!-- <meta name="viewport" content="width=device-width,initial-scale=1, maximum-scale=1,user-scalable=no"></meta> -->
 
-        <!-- 删除默认的苹果工具栏和菜单栏 -->
+    <!-- 删除默认的苹果工具栏和菜单栏 -->
 
-        <meta content="yes" name="apple-mobile-web-app-capable"></meta>
+    <meta content="yes" name="apple-mobile-web-app-capable"></meta>
 
-        <!-- 开启缓存 
+    <!-- 开启缓存 
 		content有两个值”yes”和”no”,当我们需要显示工具栏和菜单栏时，这个行meta就不用加了，默认就是显示
 		是iphone设备中的safari私有meta标签，它表示：允许全屏模式浏览 -->
 
-        <meta http-equiv="Cache-Control" content="max-age=7776000"></meta>
+    <meta http-equiv="Cache-Control" content="max-age=7776000"></meta>
 
-        <!-- 添加到主屏 -->
+    <!-- 添加到主屏 -->
 
-        <meta content="yes" name="apple-touch-fullscreen"></meta>
+    <meta content="yes" name="apple-touch-fullscreen"></meta>
 
-        <!-- safri 添加到主屏界面的显示标题 -->
+    <!-- safri 添加到主屏界面的显示标题 -->
 
-        <meta name="apple-mobile-web-app-title" content="House"></meta>
+    <meta name="apple-mobile-web-app-title" content="House"></meta>
 
-        <!-- 是iphone的私有标签，它指定的iphone中safari顶端的状态条的样式；
+    <!-- 是iphone的私有标签，它指定的iphone中safari顶端的状态条的样式；
 		在web app应用下状态条（屏幕顶部条）的颜色；
 		默认值为default（白色），可以定为black（黑色）和black-translucent（灰色半透明 -->
 
-        <meta content="black" name="apple-mobile-web-app-status-bar-style"></meta>
+    <meta content="black" name="apple-mobile-web-app-status-bar-style"></meta>
 
-        <!-- 禁止数字np，邮箱地址，地址自动转换 -->
+    <!-- 禁止数字np，邮箱地址，地址自动转换 -->
 
-        <meta content="telephone=no,email=no,adress=no" name="format-detection"></meta>
-        <title>
-            <%= htmlWebpackPlugin.options.title %>
-        </title>
-    </head>
+    <meta content="telephone=no,email=no,adress=no" name="format-detection"></meta>
+    <title>
+        <%= htmlWebpackPlugin.options.title %>
+    </title>
+</head>
 
-    <body>
-        <div class="main"></div>
-        <div class="cover"></div>   
-    </body>
+<body>
+    <div class="main"></div>
+    <div class="cover"></div>
+</body>
 
 </html>
