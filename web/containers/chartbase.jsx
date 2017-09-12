@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
 
-import echarts from 'echarts';
-import theme from 'echarts/theme/shine';
+import echarts from './echarts';
 
 class ChartBase extends Component {
     constructor(props) {
         super(props);
     }
     componentDidMount() {
-        this.myChart = echarts.init(this.refs.chart, 'theme');
+        this.myChart = echarts(this.refs.chart);
     }
     componentWillUnmount() {
         this.myChart && this.myChart.dispose();

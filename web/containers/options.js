@@ -2,7 +2,7 @@ import extend from './extend';
 
 const color = "#eee";
 const legendColor = "#eee";
-const bgColor = "rgba(0,0,0,.1)";
+const bgColor = "transparent";//rgba(0,0,0,.1)";
 const titleColor = "#4a667a";
 const subTitleColor = "#526e82";
 const axisLabelColor = subTitleColor;
@@ -25,7 +25,7 @@ export function getTitle(title, subTitle) {
 }
 export function getLegend(legend) {
     return extend(true, {}, {
-        top: 35,
+        top: 0,
         textStyle: {
             color: legendColor
         }
@@ -159,7 +159,7 @@ export function getOptions(opts) {
         grid: {
             left: 80,
             right: 20,
-            top: 80,
+            top: 40,
             bottom: 60
         },
         animationEasing: 'elasticOut',

@@ -1,0 +1,25 @@
+@import "./header";
+@import "./content";
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+body {
+    color: @color;
+    background-color: @bg;
+}
+.fullscreen{
+    width: 100vw;
+    min-height: 100vh;
+}
+html,body,.main,.layout{
+    &:extend(.fullscreen);
+}
+.main{
+    position: relative;
+    .layout{
+         &:extend(.flex-column);
+         .header(@header-height);
+         .content(@header-height);
+    }
+}

@@ -30,7 +30,8 @@ module.exports = (isProd, build) => {
         new webpack.DefinePlugin({
             "process.env": {
                 NODE_ENV: JSON.stringify(isProd ? "production" : "development")
-            }
+            },
+            __DEV__: !isProd
         })
     ];
     if (isProd) {

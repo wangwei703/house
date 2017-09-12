@@ -1,0 +1,35 @@
+.header(@h) {
+    .navbar {
+        z-index: 2;
+        height: @h;
+        line-height: @h;
+        background-color: rgba(0, 0, 0, .3);
+        display: flex;
+        padding-left: 15%;
+        width: 100vw;
+        position: fixed;
+        .navbar-item {
+            flex: 1;
+            min-width: 5rem;
+            max-width: 8rem;
+            .navbar-item-link {
+                display: block;
+                text-align: center;
+                letter-spacing: .2rem;
+                color: @color;
+                user-select: none;
+                border-bottom-width: 2px;
+                border-bottom-color: transparent;
+                border-bottom-style: solid;
+                &.active {
+                    pointer-events: none;
+                    border-bottom-color: @primary-color;
+                    color: @primary-color;
+                }
+                &:hover {
+                    border-bottom-color: @primary-color;
+                }
+            }
+        }
+    }
+}

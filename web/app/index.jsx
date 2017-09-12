@@ -1,35 +1,20 @@
-import "./app.less";
+import "./index.less";
 
 import { HashRouter, Redirect, Route, Switch } from "react-router-dom";
 import React, { Component } from 'react'
 
-import AvgPrice from './avgprice';
-import AvgPriceMon from './avgpricemon';
-import HOME from './home';
-import Header from './header';
-import { Layout } from 'antd';
-import Quantity from './quantity';
-
-const { Content, Footer, Sider } = Layout;
+import Content from './layout/content';
+import Header from './layout/header';
 
 export default class App extends Component {
 
   render() {
     return (
       <HashRouter>
-        <Layout>
+        <div className="layout">
           <Header />
-          <Content>
-            <Switch>
-              <Route exact path="/" component={HOME} />
-              <Route exact path="/home" component={HOME} />
-              <Route exact path="/avgprice" component={AvgPrice} />
-              <Route exact path="/avgpricemon" component={AvgPriceMon} />
-              <Route exact path="/quantity" component={Quantity} />
-              {/* <Redirect from='/' to='/home' /> */}
-            </Switch>
-          </Content>
-        </Layout>
+          <Content />
+        </div>
       </HashRouter>
     );
   }

@@ -40,11 +40,11 @@ module.exports = function (src) {
                         includePaths: [
                             src
                         ],
-                        modifyVars: {
-                            'primary-color': '#02D4BF',
-                            'link-color': '#02D4BF',
-                            'border-radius-base': '2px'
-                        }
+                        // modifyVars: {
+                        //     'primary-color': '#02D4BF',
+                        //     'link-color': '#02D4BF',
+                        //     'border-radius-base': '2px'
+                        // }
                     }
                 }]
             })

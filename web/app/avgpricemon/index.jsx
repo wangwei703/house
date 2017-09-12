@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 
-import AvgPriceMon from "containers/charts/avgpricemon";
+import AvgPriceMon from "containers/avgpricemon";
 import Community from "../cfg/comm.js";
+import fetchData from 'libs/comm/fetch';
 
 class componentName extends Component {
     state = {
@@ -22,39 +23,28 @@ class componentName extends Component {
         return mons;
     }
     componentDidMount() {
-        var url = `./data/avgmon.json?_dc=${new Date().getTime()}`;
-        fetch(url, {
-            method: 'GET'
-        }).then(response => {
-            if (response.ok) {
-                response.json().then(json => {
-                    let comm = Community.map(c => {
-                        let data = json.data.filter(h => h.k === c.key),
-                            lastYearMonth = this.getLastYearMonth();
-                        lastYearMonth.sort((d1, d2) => d1 > d2 ? 1 : (d1 < d2 ? -1 : 0));
-                        let nData = data.map(d => ({
-                            s: d.src,
-                            a: d.t
-                        }))
-                        return {
-                            key: c.key,
-                            name: c.name,
-                            data: {
-                                data: nData,
-                                lastYearMonth,
-                                source: json.source
-                            }
-                        }
-                    })
-                    this.setState({
-                        community: comm
-                    });
-                });
-            } else {
-                throw response.statusText;
-            }
-        }).catch(e => {
-            message.error(typeof e === "string" ? e : '加载数据文件失败');
+        fetchData("avgmon").then(json => {
+            let comm = Community.map(c => {
+                let data = json.data.filter(h => h.k === c.key),
+                    lastYearMonth = this.getLastYearMonth();
+                lastYearMonth.sort((d1, d2) => d1 > d2 ? 1 : (d1 < d2 ? -1 : 0));
+                let nData = data.map(d => ({
+                    s: d.src,
+                    a: d.t
+                }))
+                return {
+                    key: c.key,
+                    name: c.name,
+                    data: {
+                        data: nData,
+                        lastYearMonth,
+                        source: json.source
+                    }
+                }
+            })
+            this.setState({
+                community: comm
+            });
         });
     }
     render() {
@@ -62,7 +52,12 @@ class componentName extends Component {
             <div className="report-main">
                 {
                     this.state.community.map(c => {
-                        return <AvgPriceMon key={c.key} name={c.name} rptdata={c.data} />
+                        return <div key={c.key} className="report-main-item">
+                            <h2 className="report-main-item-title">{c.name}</h2>
+                            <div className="report-main-item-body">
+                                <AvgPriceMon rptdata={c.data} />
+                            </div>
+                        </div>
                     })
                 }
             </div>

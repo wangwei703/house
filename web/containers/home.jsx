@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { getLegend, getOptions, getTitle } from "./options";
 
-import echarts from 'echarts';
+import echarts from './echarts';
 import extend from './extend';
 
 class Home extends Component {
@@ -174,7 +174,7 @@ class Home extends Component {
         this.renderChart();
     }
     componentDidMount() {
-        this.myChart = echarts.init(this.refs.chart, 'theme');
+        this.myChart = echarts(this.refs.chart);
         this.renderChart();
     }
     componentWillUnmount() {
@@ -183,14 +183,14 @@ class Home extends Component {
     }
     render() {
         return (
-            <div ref="chart" style={{ height: "100%", width: "100%" }}></div>
+            <div ref="chart" style={{ height: "100%", width: "100%" }} ></div>
         )
     }
 }
 Home.propTypes = {
     rptdata: PropTypes.object
 }
-Home.defaultProps = {
-    cls: 'report-chart-content'
-}
+// Home.defaultProps = {
+//     cls: 'column-count2'
+// }
 export default Home;
