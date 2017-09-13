@@ -1,18 +1,19 @@
 .header(@h) {
     .navbar {
         z-index: 2;
-        height: @h;
-        line-height: @h;
-        background-color: rgba(0, 0, 0, .3);
+        background-color: rgba(0, 0, 0, .4);
         display: flex;
-        padding-left: 15%;
+        padding: .8rem 0 .8rem 10%;
         width: 100vw;
         position: fixed;
+        font-size: 1.25rem;
         .navbar-item {
             flex: 1;
             min-width: 5rem;
             max-width: 8rem;
             .navbar-item-link {
+                height: @h - .8rem*2;
+                line-height: @h - .8rem*2;
                 display: block;
                 text-align: center;
                 letter-spacing: .2rem;

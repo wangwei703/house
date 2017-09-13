@@ -3,11 +3,13 @@ import extend from './extend';
 const color = "#eee";
 const legendColor = "#eee";
 const bgColor = "transparent"; //rgba(0,0,0,.1)";
-const titleColor = "#4a667a";
-const subTitleColor = "#526e82";
+const titleColor = "##8796a1";
+const subTitleColor = "#4a667a";
 const axisLabelColor = subTitleColor;
 const axisLineColor = subTitleColor;
 const chartColors = ['#944BE8', '#02D4BF', '#38b4ee', '#303f9f'];
+const fontFamily = "fzlthb";
+const fontSize=14;
 
 export function getTitle(title, subTitle) {
     return {
@@ -41,6 +43,9 @@ export function getX(x) {
         splitLine: { //网格线
             show: false
         },
+        nameTextStyle:{
+            fontSize:16
+        },
         axisLine: {
             show: true,
             lineStyle: {
@@ -58,7 +63,7 @@ export function getX(x) {
             splitNumber: 5,
             textStyle: {
                 color: axisLineColor,
-                fontFamily: "Lato"
+                fontFamily//: "Lato"
             }
         },
     }, x);
@@ -67,10 +72,13 @@ export function getY(y) {
     return extend(true, {}, {
         scale: true,
         axisTick: { show: false },
+        nameTextStyle:{
+            fontSize:16
+        },
         axisLabel: {
             textStyle: {
                 color: axisLabelColor,
-                fontFamily: "Lato"
+                fontFamily//: "Lato"
             }
         },
         axisLine: {
@@ -110,7 +118,7 @@ export function getLineSeries(s, order = 0) {
             normal: {
                 show: true,
                 position: 'top',
-                fontFamily: "Lato"
+                fontFamily//: "Lato"
             }
         },
         lineStyle: {
@@ -121,7 +129,7 @@ export function getLineSeries(s, order = 0) {
                 shadowOffsetY: 5
             }
         },
-        animationDelay: function(idx) {
+        animationDelay: function (idx) {
             return idx * 10 + (order * 100);
         }
     }, s);
@@ -135,7 +143,7 @@ export function getBarSeries(s, order = 0) {
             normal: {
                 show: true,
                 position: 'top',
-                fontFamily: "Lato"
+                fontFamily//: "Lato"
             }
         },
         itemStyle: {
@@ -144,7 +152,7 @@ export function getBarSeries(s, order = 0) {
                 opacity: 1
             }
         },
-        animationDelay: function(idx) {
+        animationDelay: function (idx) {
             return idx * 10 + (order * 100);
         }
     }, s);
@@ -153,6 +161,11 @@ export function getOptions(opts) {
     return extend(true, {}, {
         backgroundColor: bgColor,
         color: chartColors,
+        legend: {
+            textStyle: {
+                fontSize: 16
+            }
+        },
         tooltip: {
             trigger: 'axis'
         },
@@ -160,14 +173,15 @@ export function getOptions(opts) {
             left: 80,
             right: 20,
             top: 40,
-            bottom: 60
+            bottom: 70
         },
         animationEasing: 'elasticOut',
-        animationDelayUpdate: function(idx) {
+        animationDelayUpdate: function (idx) {
             return idx * 5;
         },
         textStyle: {
-            fontSize: 14
+            fontSize: 14,
+            fontFamily
         }
 
     }, opts);

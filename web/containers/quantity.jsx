@@ -41,7 +41,7 @@ class Quantity extends ChartBase {
                 type: 'value',
                 name: "数量",
                 axisLabel: {
-                    formatter: '{value} 户'
+                    formatter: '{value} 套'
                 }
             })];
         let opts = getOptions({

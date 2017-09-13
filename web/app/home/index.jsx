@@ -30,24 +30,28 @@ class Report extends Component {
         })
     }
     getCardRepot(json) {
-        return Object.entries(json.source).map((s, idx) => {
+        let rptdata = Object.entries(json.source).map((s, idx) => {
             let sk = s[0], sn = s[1];
             let dayData = json.day.find(d => d.s === sk),
                 monData = json.mon.find(d => d.s === sk),
-                rptdata = {};
+                data = {};
             if (dayData)
-                rptdata.day = {
+                data.day = {
                     v: dayData.a,
                     p: dayData.p
                 }
             if (monData) {
-                rptdata.mon = {
+                data.mon = {
                     v: monData.a,
                     p: monData.p
                 }
             }
-            return <RealTimeRpt key={sk + "_" + idx} name={sn} rptdata={rptdata} />
+            return {
+                name: sn,
+                data
+            };
         });
+        return <RealTimeRpt rptdata={rptdata} />
     }
     render() {
         return (

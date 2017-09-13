@@ -51,7 +51,7 @@ class AvgPrice extends ChartBase {
         let series = [];
         data.forEach((item) => {
             let data = item.data.map((d, i) => ({
-                value: [d[0], d[1]],
+                value: d,
                 symbolOffset: [3 * (3 - i % 5), 0],
                 symbolSize: Math.max(1, Math.min(6, d[2] / 2))
             }));
@@ -115,8 +115,13 @@ class AvgPrice extends ChartBase {
                     return `<b style="padding:8px 0">${title}</b><br />
                             ${line.map(l => {
                             let val = typeof l.value === "number" ? l.value : "--",
-                                scatter = a.filter(_a => _a.seriesType === "scatter" && _a.seriesName === l.seriesName);
-                            return "<div style='padding:2px 0'>" + l.marker + l.seriesName + "：" + val + "￥&nbsp;&nbsp;" + scatter.length + "套</div>"
+                                scatter = a.filter(_a => _a.seriesType === "scatter" && _a.seriesName === l.seriesName),
+                                sum = scatter.reduce((x, b) => x + (b.data.value[2] || 0), 0);
+                            return `<div style='padding:2px 0'>
+                                         <div style="display:inline-block;text-align:left;width:5rem;">${l.marker + l.seriesName}</div>:
+                                         <div style="display:inline-block;text-align:left;width:5rem;padding-left:.3rem;font-size:1rem;color:${l.color};"><b>${val}￥</b></div >
+                                         <div style="display:inline-block;text-align:right;width:3rem;font-size:12px;color:#ccc;">${sum}套</div>
+                                    </div > `
                         }).join("")}`
                 }
             },
