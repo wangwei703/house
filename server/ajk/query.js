@@ -76,7 +76,7 @@ class Query {
                         d = parseInt(matchs[3], 10),
                         fbDate = new Date(y, m, d),
                         ts = now.getTime() - fbDate.getTime();
-                    if (ts / 1000 / 3600 / 24 <= 2) {
+                    if (ts / 1000 / 3600 / 24 <= 1) {
                         house.date = `${y}-${m + 1}-${d}`;
                         house.imgs = $img.toArray().map(img => $(img).data("src"));
                         return true;
@@ -90,7 +90,7 @@ class Query {
         let list = [];
         console.log(`\t查找房源列表：`);
         try {
-            for (let i = 1; i < 4; i++) {
+            for (let i = 1; i < 3; i++) {
                 console.log(`\t第 ${i} 页`);
                 let data = await this.fetchHouseList(i === 1 ? null : i);
                 list.push(...data);

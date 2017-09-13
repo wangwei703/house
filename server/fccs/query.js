@@ -75,6 +75,7 @@ class Query {
                 address && address.includes(this.house.filters[0]) && list.push(obj);
             });
             }catch(e){
+                console.log(e);
                 return Promise.reject(e);
             }
             if (list.length === 0) return Promise.reject("近期无记录");

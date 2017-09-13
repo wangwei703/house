@@ -3,10 +3,10 @@ const path = require("path");
 const dateComm = require("./date");
 const SOURCE = { "ajk": "安居客", "fccs": "房产超市" };
 const PRICELIMIT = {
-    "zgtjgjc-hcy": [14000, 19000],
+    "zgtjgjc-hcy": [13000, 19000],
     "jntyc": [10000, 15000],
-    "hrhy": [10000, 16000],
-    "jy-dfds": [12000, 18000]
+    "hrhy": [12000, 18000],
+    "jy-dfds": [11000, 19000]
 }
 let HouseList = [];
 let commMap = new Map();
