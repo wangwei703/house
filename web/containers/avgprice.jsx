@@ -118,9 +118,9 @@ class AvgPrice extends ChartBase {
                                 scatter = a.filter(_a => _a.seriesType === "scatter" && _a.seriesName === l.seriesName),
                                 sum = scatter.reduce((x, b) => x + (b.data.value[2] || 0), 0);
                             return `<div style='padding:2px 0'>
-                                         <div style="display:inline-block;text-align:left;width:5rem;">${l.marker + l.seriesName}</div>:
-                                         <div style="display:inline-block;text-align:left;width:5rem;padding-left:.3rem;font-size:1rem;color:${l.color};"><b>${val}￥</b></div >
-                                         <div style="display:inline-block;text-align:right;width:3rem;font-size:12px;color:#ccc;">${sum}套</div>
+                                         <div style="display:inline-block;text-align:left;width:5rem;font-size:16px;">${l.marker + l.seriesName}</div>:
+                                         <div style="display:inline-block;text-align:left;width:5rem;padding-left:.3rem;font-size:1rem;letter-spacing:.1rem;"><b>${val}￥</b></div >
+                                         <div style="display:inline-block;text-align:right;width:3rem;font-size:14px;color:#ccc;">${sum}套</div>
                                     </div > `
                         }).join("")}`
                 }

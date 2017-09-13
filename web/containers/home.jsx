@@ -63,7 +63,7 @@ class Home extends ChartBase {
     formatDaySeries(data,idx) {
         return this.formatSeries(data, {
             name: "当日",
-            radius: ['75%', '80%'],
+            radius: ['65%', '70%'],
             itemStyle: {
                 normal: {
                     color: '#02D4BF',
@@ -75,11 +75,11 @@ class Home extends ChartBase {
             labelNormal: (v, p, c) => {
                 if (typeof v === "number" && typeof p === "number") {
                     p = p < 0 ? p : `+${p}`;
-                    return this.dataLabel(`￥${v}/${p}%`, c, 24);
+                    return this.dataLabel(`￥${v}/${p}%`, c, 22);
                 } else if (typeof v === "number") {
-                    return this.dataLabel(`￥${v}/--`, c, 24);
+                    return this.dataLabel(`￥${v}/--`, c, 22);
                 } else {
-                    return this.dataLabel(null, c, 24);
+                    return this.dataLabel(null, c, 22);
                 }
             }
         })
@@ -87,7 +87,7 @@ class Home extends ChartBase {
     formatMonSeries(data,idx) {
         return this.formatSeries(data, {
             name: "当月",
-            radius: ['65%', '66%'],
+            radius: ['55%', '56%'],
             center: [this.getOffsetX(idx), '53%'],
             itemStyle: {
                 normal: {
@@ -118,7 +118,6 @@ class Home extends ChartBase {
             textStyle: {
                 fontSize,
                 fontWeight: 'normal',
-                fontFamily: "Lato",
                 color
             }
         }
@@ -126,7 +125,7 @@ class Home extends ChartBase {
     getTitle(text, idx) {
         return {
             text,
-            top: '35%',
+            top: '38%',
             left: this.getOffsetX(idx),
             textAlign: 'center',
             textStyle: {
@@ -171,10 +170,7 @@ class Home extends ChartBase {
             legend: getLegend({
                 top: 10,
                 itemGap: 24,
-                data: ["当日", "当月"],
-                textStyle: {
-                    fontSize: 14
-                }
+                data: ["当日", "当月"]
             }),
             series
         });
