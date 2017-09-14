@@ -63,7 +63,7 @@ class Home extends ChartBase {
     formatDaySeries(data,idx) {
         return this.formatSeries(data, {
             name: "当日",
-            radius: ['65%', '70%'],
+            radius: ['65%', '67%'],
             itemStyle: {
                 normal: {
                     color: '#02D4BF',
