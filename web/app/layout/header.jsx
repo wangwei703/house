@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 
 const LINKS = [{
     key: "home",
-    name: "首页"
+    name: "今日房价"
 }, {
     key: "avgprice",
     name: "日走势"

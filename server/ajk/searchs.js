@@ -37,6 +37,6 @@ module.exports = [{
     filters: ["清源路"],
     url(page) {
         page = page ? `-p${page}` : "";
-        return `https://${this.city}.anjuke.com/sale/o5${page}/?kw=${encodeURIComponent(this.name)}`;
+        return `https://${this.city}.anjuke.com/sale/b220-o5${page}/?kw=${encodeURIComponent(this.name)}`;
     }
 }]

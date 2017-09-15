@@ -1,2 +1,2 @@
 
-node ./server/ajk/index&&node ./server/fccs/index
+node ajk/index&&node fccs/index&&node index

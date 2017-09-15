@@ -27,8 +27,9 @@ class Report extends Component {
             this.setState({
                 data
             });
-        })
+        });
     }
+    
     getCardRepot(json) {
         let rptdata = Object.entries(json.source).map((s, idx) => {
             let sk = s[0], sn = s[1];
@@ -55,7 +56,7 @@ class Report extends Component {
     }
     render() {
         return (
-            <div className="report-main">
+            <div className="report-main" >
                 {
                     this.state.data.map((c, idx) => {
                         return <div key={idx} className="report-main-item">

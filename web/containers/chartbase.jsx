@@ -13,12 +13,6 @@ class ChartBase extends Component {
         this.myChart && this.myChart.dispose();
         this.myChart = null;
     }
-     componentWillReceiveProps(nextProps) {
-        this.setState({ 
-            min: nextProps.min||10000,
-            max: nextProps.max||20000
-         });
-    }
     render() {
         return (
             <div ref="chart" className={this.props.cls} style={{ ...this.props.style }}></div>
