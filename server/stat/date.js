@@ -38,6 +38,15 @@ let dateComm = {
         let date = this.now();
         date.setMonth(date.getMonth() - 1);
         return this.formatYM(date);
+    },
+    getMonths(count = 12) {
+        let date = this.now(),
+            mons = [this.formatYM(date)];
+        for (var i = 0; i < count - 1; i++) {
+            date.setMonth(date.getMonth() - 1);
+            mons.unshift(this.formatYM(date));
+        }
+        return mons;
     }
 }
 module.exports = dateComm;
