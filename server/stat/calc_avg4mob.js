@@ -22,6 +22,7 @@ let getMonthStr = date => {
     m = m < 10 ? "0" + m : m;
     return m;
 }
+
 function calcHome(houseList, comm, source, trend) {
     let today = dateComm.today(),
         yesterday = dateComm.yesterday(),
@@ -32,8 +33,8 @@ function calcHome(houseList, comm, source, trend) {
     comm.forEach(cm => {
         Object.keys(source).forEach(sk => {
             let todayList = houseList.filter(h => {
-                return h.src === sk && h.k === cm[0] && h.d === today
-            }),
+                    return h.src === sk && h.k === cm[0] && h.d === today
+                }),
                 yesterdayList = houseList.filter(h => {
                     return h.src === sk && h.k === cm[0] && h.d === yesterday
                 });
@@ -93,11 +94,13 @@ function calcHome(houseList, comm, source, trend) {
     }
     return result;
 }
+
 function calcAvg(houseList, comm, date, source) {
     let data = [];
     comm.forEach(cm => {
         Object.keys(source).forEach(sk => {
-            let avgList = [], quaList = [];
+            let avgList = [],
+                quaList = [];
             date.forEach((d, dIndex) => {
                 let hList = houseList.filter(h => {
                     return h.src === sk && h.k === cm[0] && h.d === d
@@ -130,11 +133,14 @@ function calcMon(trend) {
             return data[mon];
         });
         return {
-            s, c, t: arr
+            s,
+            c,
+            t: arr
         }
     });
     return { mons, everymon }
 }
+
 function groupTrend(houseList, comm, date, source) {
     let statArr = [];
     comm.forEach(cm => {
@@ -142,24 +148,32 @@ function groupTrend(houseList, comm, date, source) {
             cmKey = cm[0],
             data = [];
         Object.keys(source).forEach(sk => {
-            let hList = houseList.filter(h => {
-                return h.src === sk && h.k === cmKey
-            });
-            let X = [], Y = [];
-            hList.forEach(h => {
-                let x = date.indexOf(h.d), y = h.u;
-                if (x > -1) {
-                    X.push(x + 1);
-                    Y.push(y);
+            let avgList = [];
+            date.forEach((d, dIndex) => {
+                let hList = houseList.filter(h => {
+                    return h.src === sk && h.k === cm[0] && h.d === d
+                });
+                let len = hList.length;
+                if (len > 0) {
+                    let avg = getAvg(hList);
+                    avgList.push(avg);
                 }
             });
-            if (hList.length > 5) {
-                let regressionModel = new ml.SLR(X, Y);
-                data.push({
-                    s: sk,
-                    slr: regressionModel.coefficients
-                });
-            }
+
+            let X = [],
+                Y = [];
+            avgList.forEach((a, i) => {
+                X.push(i + 1);
+                Y.push(a);
+            });
+            console.log(cmName, sk);
+            console.log(X, Y);
+            console.log("---------------------");
+            let regressionModel = new ml.SLR(X, Y);
+            data.push({
+                s: sk,
+                slr: regressionModel.coefficients
+            });
         });
         statArr.push({
             c: cmKey,
@@ -170,8 +184,7 @@ function groupTrend(houseList, comm, date, source) {
 }
 
 function calcAvg4Mob(houseList, comm, date, source, trend) {
-    let { today, thismonth } = calcHome(houseList, comm, source, trend),
-        { mons, everymon } = calcMon(trend),
+    let { today, thismonth } = calcHome(houseList, comm, source, trend), { mons, everymon } = calcMon(trend),
         everyday = calcAvg(houseList, comm, date, source),
         trendbyDay = groupTrend(houseList, comm, date, source);
 
