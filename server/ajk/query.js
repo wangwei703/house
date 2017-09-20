@@ -15,6 +15,7 @@ class Query {
     }
     async fetchPricetrend() {
         let url = `https://${this.house.city}.anjuke.com/v3/ajax/prop/pricetrend/?commid=${this.house.id}`
+        console.log(url);
         return fetch(url).then(data => {
             return JSON.parse(data);
         });
