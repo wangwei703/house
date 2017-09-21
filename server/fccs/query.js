@@ -97,7 +97,7 @@ class Query {
             dateStr = dateStr.substr(0, 10);
             let fbDate = new Date(dateStr),
                 ts = now.getTime() - fbDate.getTime();
-            if (ts / 1000 / 3600 / 24 <= 1) {
+            if (ts / 1000 / 3600 / 24 <= 2) {
                 return dateStr;
             }
         }

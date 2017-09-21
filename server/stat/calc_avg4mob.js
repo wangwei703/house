@@ -33,8 +33,8 @@ function calcHome(houseList, comm, source, trend) {
     comm.forEach(cm => {
         Object.keys(source).forEach(sk => {
             let todayList = houseList.filter(h => {
-                    return h.src === sk && h.k === cm[0] && h.d === today
-                }),
+                return h.src === sk && h.k === cm[0] && h.d === today
+            }),
                 yesterdayList = houseList.filter(h => {
                     return h.src === sk && h.k === cm[0] && h.d === yesterday
                 });
@@ -148,30 +148,31 @@ function groupTrend(houseList, comm, date, source) {
             cmKey = cm[0],
             data = [];
         Object.keys(source).forEach(sk => {
-            let avgList = [];
+            let avgList = [], quaList = [];
             date.forEach((d, dIndex) => {
                 let hList = houseList.filter(h => {
                     return h.src === sk && h.k === cm[0] && h.d === d
                 });
                 let len = hList.length;
-                if (len > 0) {
-                    let avg = getAvg(hList);
-                    avgList.push(avg);
-                }
+                quaList.push(len);
+                //if (len > 0) {
+                let avg = getAvg(hList);
+                avgList.push(avg);
+                // }
             });
 
             let X = [],
-                Y = [];
-            avgList.forEach((a, i) => {
+                Y = [],
+                tList=avgList.filter(i=>typeof i==="number"&&i>0);
+            tList.forEach((a, i) => {
                 X.push(i + 1);
                 Y.push(a);
             });
-            console.log(cmName, sk);
-            console.log(X, Y);
-            console.log("---------------------");
             let regressionModel = new ml.SLR(X, Y);
             data.push({
                 s: sk,
+                a: avgList,
+                t: quaList,
                 slr: regressionModel.coefficients
             });
         });
@@ -195,7 +196,7 @@ function calcAvg4Mob(houseList, comm, date, source, trend) {
         source: sourceArr,
         today,
         thismonth,
-        everyday,
+        // everyday,
         everymon,
         trend: trendbyDay
     };
