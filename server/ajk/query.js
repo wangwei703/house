@@ -77,7 +77,7 @@ class Query {
                         d = parseInt(matchs[3], 10),
                         fbDate = new Date(y, m, d),
                         ts = now.getTime() - fbDate.getTime();
-                    if (ts / 1000 / 3600 / 24 <= 1) {
+                    if (ts / 1000 / 3600 / 24 <= 2) {
                         house.date = `${y}-${m + 1}-${d}`;
                         house.imgs = $img.toArray().map(img => $(img).data("src"));
                         return true;

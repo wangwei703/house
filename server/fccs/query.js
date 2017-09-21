@@ -3,6 +3,10 @@ const jsdom = require("jsdom");
 const { window } = new jsdom.JSDOM(`<!DOCTYPE html>`);
 var $ = require('jquery')(window);
 
+function getTime() {
+    let now = new Date();
+    return now.toLocaleTimeString();
+}
 class Query {
     constructor(house) {
         this.house = house;
@@ -42,39 +46,39 @@ class Query {
                 $list = $html.find(".fy_list>ul>li.item.salelist").toArray();
             if ($list.length === 0) return Promise.reject("列表空");
             let list = [];
-            try{
-            $list.forEach(item => {
-                let $item = $(item),
-                    $details = $item.find(".info0"),
-                    $price = $item.find(".info1");
-                let link = $details.find(".t a"),
-                    href=link.attr("href"),
-                    key = this.getHouseKey(href),
-                    title = link.text(),
-                    $detailsItem = $details.find(".s label"),
-                    detailsItem = $detailsItem.text().split('|'),
-                    address = $details.find(".lp label:eq(1)").text(),
-                    details = {
-                        home: $detailsItem.find(".w_c_1").html(),
-                        floor: detailsItem[2]?detailsItem[2].trim():"",
-                        buildyear: detailsItem[4]?parseFloat(detailsItem[4].trim()):null
-                    },
-                    area = parseFloat($price.find(".p1 .fl").html()),
-                    totalprice = parseFloat($price.find(".p1 .f24").html()),
-                    unitprice = Math.round(totalprice * 1e4 / area),
-                    date = this.getDate($details.find(".s1 .pt5 .w_c_5").text());
-                let obj = {
-                    key,
-                    title,
-                    details,
-                    area,
-                    totalprice,
-                    unitprice,
-                    date
-                }
-                address && address.includes(this.house.filters[0]) && list.push(obj);
-            });
-            }catch(e){
+            try {
+                $list.forEach(item => {
+                    let $item = $(item),
+                        $details = $item.find(".info0"),
+                        $price = $item.find(".info1");
+                    let link = $details.find(".t a"),
+                        href = link.attr("href"),
+                        key = this.getHouseKey(href),
+                        title = link.text(),
+                        $detailsItem = $details.find(".s label"),
+                        detailsItem = $detailsItem.text().split('|'),
+                        address = $details.find(".lp label:eq(1)").text(),
+                        details = {
+                            home: $detailsItem.find(".w_c_1").html(),
+                            floor: detailsItem[2] ? detailsItem[2].trim() : "",
+                            buildyear: detailsItem[4] ? parseFloat(detailsItem[4].trim()) : null
+                        },
+                        area = parseFloat($price.find(".p1 .fl").html()),
+                        totalprice = parseFloat($price.find(".p1 .f24").html()),
+                        unitprice = Math.round(totalprice * 1e4 / area),
+                        date = this.getDate($details.find(".s1 .pt5 .w_c_5").text());
+                    let obj = {
+                        key,
+                        title,
+                        details,
+                        area,
+                        totalprice,
+                        unitprice,
+                        date
+                    }
+                    address && address.includes(this.house.filters[0]) && list.push(obj);
+                });
+            } catch (e) {
                 console.log(e);
                 return Promise.reject(e);
             }
@@ -106,20 +110,38 @@ class Query {
     async start() {
         let list = [];
         console.log(`\t查找房源列表：`);
-        try {
-            for (let i = 1; i < 50; i++) {
-                console.log(`\t第 ${i} 页`);
+
+        for (let i = 1; i < 155; i++) {
+            try {
+                console.log(`\t${getTime()}\t第 ${i} 页`);
                 let data = await this.fetchHouseList(i === 1 ? null : i);
                 list.push(...data);
+            } catch (e) {
+                if (e.code === 'ETIMEDOUT') {
+                    i--;
+                    console.log("timeout try again!");
+                } else {
+                    console.log("complete!", e);
+                    break;
+                }
             }
-        } catch (e) {
-            console.log("complete!", e);
         }
+
         list = list.filter(item => {
             return item.date;
         });
         console.log(`\t统计价格走势：`);
-        let trend = await this.fetchPricetrend();
+        let trend = [];
+        while (true) {
+            try {
+                trend = await this.fetchPricetrend();
+                break;
+            } catch (e) {
+                if (e.code === 'ETIMEDOUT') {
+                    console.log("timeout try again!");
+                }
+            };
+        }
         return [list, trend];
     }
 };
