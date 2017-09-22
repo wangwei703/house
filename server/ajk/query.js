@@ -91,7 +91,7 @@ class Query {
         let list = [];
         console.log(`\t查找房源列表：`);
         try {
-            for (let i = 1; i < 3; i++) {
+            for (let i = 1; i < 5; i++) {
                 console.log(`\t第 ${i} 页`);
                 let data = await this.fetchHouseList(i === 1 ? null : i);
                 list.push(...data);
@@ -111,8 +111,24 @@ class Query {
             return item.date;
         });
         console.log(`\t统计价格走势：`);
-        let trend = await this.fetchPricetrend();
-        delete trend.status;
+        let trend;
+        //暂时取消抓取月度价格走势数据
+        console.log("手动复制下面地址，查看月度趋势：");
+        console.log(`https://${this.house.city}.anjuke.com/v3/ajax/prop/pricetrend/?commid=${this.house.id}`);
+        // while (true) {
+        //     try {
+        //         trend = await this.fetchPricetrend();
+        //         delete trend.status;
+        //         break;
+        //     } catch (e) {
+        //         if (e.code === 'ETIMEDOUT') {
+        //             console.log("timeout try again!");
+        //         }
+        //         else{
+        //             break;
+        //         }
+        //     };
+        // }
         return [list, trend];
     }
 };

@@ -131,7 +131,7 @@ class Query {
             return item.date;
         });
         console.log(`\t统计价格走势：`);
-        let trend = [];
+        let trend;
         while (true) {
             try {
                 trend = await this.fetchPricetrend();
