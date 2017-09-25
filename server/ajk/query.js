@@ -3,6 +3,10 @@ const jsdom = require("jsdom");
 const { window } = new jsdom.JSDOM(`<!DOCTYPE html>`);
 var $ = require('jquery')(window);
 
+function getTime() {
+    let now = new Date();
+    return now.toLocaleTimeString();
+}
 class Query {
     constructor(house) {
         this.house = house;
@@ -15,13 +19,14 @@ class Query {
     }
     async fetchPricetrend() {
         let url = `https://${this.house.city}.anjuke.com/v3/ajax/prop/pricetrend/?commid=${this.house.id}`
-        console.log(url);
+
         return fetch(url).then(data => {
             return JSON.parse(data);
         });
     }
     async fetchHouseList(page) {
         let url = this.house.url(page);
+
         return fetch(url).then(html => {
             let $html = $(html),
                 $list = $html.find("#houselist-mod-new li.list-item").toArray();
@@ -92,7 +97,7 @@ class Query {
         console.log(`\t查找房源列表：`);
         try {
             for (let i = 1; i < 5; i++) {
-                console.log(`\t第 ${i} 页`);
+                console.log(`\t${getTime()}\t第 ${i} 页`);
                 let data = await this.fetchHouseList(i === 1 ? null : i);
                 list.push(...data);
             }
@@ -101,7 +106,7 @@ class Query {
         }
         console.log(`\t查找房源详情：`);
         for (let i = 0; i < list.length; i++) {
-            console.log(`\t${i + 1}/${list.length}`)
+            console.log(`\t${getTime()}\t${i + 1}/${list.length}`)
             let b = await this.fetchHouseDetails(list[i]);
             if (!b) {
                 break;

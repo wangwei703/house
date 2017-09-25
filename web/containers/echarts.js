@@ -8,4 +8,4 @@ import 'echarts/lib/chart/scatter';
 
 import echarts from 'echarts/lib/echarts';
 
-export default dom =>echarts.init(dom);
+export default dom => echarts.init(dom);
