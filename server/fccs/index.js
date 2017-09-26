@@ -1,22 +1,33 @@
 const fs = require("fs");
-const searchs = require('./searchs');
+const community = require('./community');
 const Query = require("./query");
-const  writeData = require("./files");
+const { writeHistory, write } = require("./files");
+const merge = require("./merge");
 async function start() {
-     var data = {};
-    for (let i = 0; i < searchs.length; i++) {
-        let item = searchs[i];
-        console.info(item.name + "：");
+    var houseObj = {}, Trend = {};
+    console.group("抓取各小区房源信息");
+    for (let i = 0; i < community.length; i++) {
+        let item = community[i];
         let q = new Query(item);
         let [list, trend] = await q.start();
-        data[item.code] = {
+        houseObj[item.code] = {
             name: item.name,
-            list,
-            trend
+            list
         }
-        console.log(item.name + "--end")
+        Trend[item.code] = trend;
     }
-    writeData(data);
+    console.groupEnd();
+
+    console.log("写入当日数据文件");
+    writeHistory(houseObj);
+
+    console.group("开始合并房源列表");
+    let list = merge(houseObj);
+    write(list, "list");
+    console.groupEnd();
+    console.group("保存月度趋势数据");
+    write(Trend, "trend");
+    console.groupEnd();
     console.log("End");
 }
 start();

@@ -17,13 +17,6 @@ class Query {
             return matchs[1];
         }
     }
-    async fetchPricetrend() {
-        let url = `https://${this.house.city}.anjuke.com/v3/ajax/prop/pricetrend/?commid=${this.house.id}`
-
-        return fetch(url).then(data => {
-            return JSON.parse(data);
-        });
-    }
     async fetchHouseList(page) {
         let url = this.house.url(page);
 
@@ -43,11 +36,7 @@ class Query {
                     key = this.getHouseKey(_href),
                     $detailsItem = $details.find(".details-item"),
                     address = $details.find(".comm-address").attr("title"),
-                    details = {
-                        home: $detailsItem.find("span:eq(0)").html(),
-                        floor: $detailsItem.find("span:eq(2)").html(),
-                        buildyear: parseFloat($detailsItem.find("span:eq(3)").html())
-                    },
+
                     area = parseFloat($detailsItem.find("span:eq(1)").html()),
                     totalprice = parseFloat($price.find(".price-det strong").html()),
                     unitprice = parseFloat($price.find(".unit-price").html());
@@ -56,7 +45,6 @@ class Query {
                     key,
                     _href,
                     href,
-                    details,
                     area,
                     totalprice,
                     unitprice
@@ -71,7 +59,6 @@ class Query {
         delete house._href;
         return fetch(url).then(html => {
             let $body = $(html),
-                $img = $body.find("#room_pic_wrap .img_wrap img"),
                 encode = $body.find(".house-encode").html();
             if (encode) {
                 let matchs = encode.match(/[0-9][0-9]*/g);
@@ -84,7 +71,6 @@ class Query {
                         ts = now.getTime() - fbDate.getTime();
                     if (ts / 1000 / 3600 / 24 <= 2) {
                         house.date = `${y}-${m + 1}-${d}`;
-                        house.imgs = $img.toArray().map(img => $(img).data("src"));
                         return true;
                     }
                 }
@@ -94,47 +80,32 @@ class Query {
     }
     async start() {
         let list = [];
-        console.log(`\t查找房源列表：`);
+        console.group(this.house.name);
+        console.group("查找近期发布房源：");
         try {
             for (let i = 1; i < 5; i++) {
-                console.log(`\t${getTime()}\t第 ${i} 页`);
+                console.log(`${getTime()}\t第 ${i} 页`);
                 let data = await this.fetchHouseList(i === 1 ? null : i);
                 list.push(...data);
             }
         } catch (e) {
             console.log("complete!", e);
         }
-        console.log(`\t查找房源详情：`);
+        console.groupEnd();
+        console.group(`查询各房源的发布时间：`);
         for (let i = 0; i < list.length; i++) {
-            console.log(`\t${getTime()}\t${i + 1}/${list.length}`)
+            console.log(`${getTime()}\t${i + 1}/${list.length}`)
             let b = await this.fetchHouseDetails(list[i]);
             if (!b) {
                 break;
             }
         }
+        console.groupEnd();
         list = list.filter(item => {
             return item.date;
         });
-        console.log(`\t统计价格走势：`);
-        let trend;
-        //暂时取消抓取月度价格走势数据
-        console.log("手动复制下面地址，查看月度趋势：");
-        console.log(`https://${this.house.city}.anjuke.com/v3/ajax/prop/pricetrend/?commid=${this.house.id}`);
-        // while (true) {
-        //     try {
-        //         trend = await this.fetchPricetrend();
-        //         delete trend.status;
-        //         break;
-        //     } catch (e) {
-        //         if (e.code === 'ETIMEDOUT') {
-        //             console.log("timeout try again!");
-        //         }
-        //         else{
-        //             break;
-        //         }
-        //     };
-        // }
-        return [list, trend];
+        console.groupEnd();
+        return list;
     }
 };
 

@@ -16,16 +16,27 @@ function getName(){
         s=padLeft(n.getSeconds());
     return `${y}${M}${d}${h}${m}${s}`;
 }
-function writeData(list) {
+function write(list, name) {
+    var txt = JSON.stringify(list)
+    let err=fs.writeFileSync(path.resolve(__dirname, `./data/${name}.json`), txt);
+    if (err)
+        console.log("fail " + err);
+    else {
+        console.log("写入文件ok");
+    }
+}
+function writeHistory(list) {
     var d = getName();
-    var txt = JSON.stringify(list); // "module.exports=" + JSON.stringify( points );
-    fs.writeFile(path.resolve(__dirname, `./data/${d}.json`), txt, function (err) {
-        if (err)
-            console.log("\tfail " + err);
-        else {
-            console.log("\t写入文件ok");
-        }
-    });
+    var txt = JSON.stringify(list);
+    let err = fs.writeFileSync(path.resolve(__dirname, `./data/history/${d}.json`), txt);
+    if (err)
+        console.log("fail " + err);
+    else {
+        console.log("写入文件ok");
+    }
 }
 
-module.exports =writeData;
+module.exports ={
+    writeHistory,
+    write
+};

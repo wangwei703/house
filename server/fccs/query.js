@@ -23,7 +23,7 @@ class Query {
                 json[2].xAxis.forEach((x, i) => {
                     let m = x.match(/[0-9][0-9]*/g);
                     if (m.length === 2) {
-                        let k = `20${m[0]}${parseInt(m[1],10) < 10 ? ("0" + m[1]) : m[1]}`,
+                        let k = `20${m[0]}${parseInt(m[1], 10) < 10 ? ("0" + m[1]) : m[1]}`,
                             v = data[i];
                         community.push({
                             [k]: v
@@ -58,11 +58,7 @@ class Query {
                         $detailsItem = $details.find(".s label"),
                         detailsItem = $detailsItem.text().split('|'),
                         address = $details.find(".lp label:eq(1)").text(),
-                        details = {
-                            home: $detailsItem.find(".w_c_1").html(),
-                            floor: detailsItem[2] ? detailsItem[2].trim() : "",
-                            buildyear: detailsItem[4] ? parseFloat(detailsItem[4].trim()) : null
-                        },
+
                         area = parseFloat($price.find(".p1 .fl").html()),
                         totalprice = parseFloat($price.find(".p1 .f24").html()),
                         unitprice = Math.round(totalprice * 1e4 / area),
@@ -70,7 +66,6 @@ class Query {
                     let obj = {
                         key,
                         title,
-                        details,
                         area,
                         totalprice,
                         unitprice,
@@ -109,11 +104,11 @@ class Query {
     }
     async start() {
         let list = [];
-        console.log(`\t查找房源列表：`);
-
-        for (let i = 1; i < 155; i++) {
+        console.group(this.house.name);
+        console.group("查找近期发布房源：");
+        for (let i = 1; i < 200; i++) {
             try {
-                console.log(`\t${getTime()}\t第 ${i} 页`);
+                console.log(`${getTime()}\t第 ${i} 页`);
                 let data = await this.fetchHouseList(i === 1 ? null : i);
                 list.push(...data);
             } catch (e) {
@@ -130,7 +125,8 @@ class Query {
         list = list.filter(item => {
             return item.date;
         });
-        console.log(`\t统计价格走势：`);
+        console.groupEnd();
+        console.group(`统计价格走势：`);
         let trend;
         while (true) {
             try {
@@ -142,6 +138,8 @@ class Query {
                 }
             };
         }
+        console.groupEnd();
+        console.groupEnd();
         return [list, trend];
     }
 };

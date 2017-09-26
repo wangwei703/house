@@ -15,54 +15,46 @@ let Trend = new Map();
 function getFiles(url) {
     return fs.readdirSync(url);
 }
-function readHouseData(src) {
-    let url = path.resolve(__dirname, `../${src}/data/`),
-        files = getFiles(url);
-    files.forEach(f => {
-        let txt = fs.readFileSync(path.resolve(url, f), 'utf-8'),
-            date = f.replace(".json", ""),
-            json = JSON.parse(txt);
-        Object.keys(json).map(k => {
-            let data = json[k],
-                name = data.name;
-            commMap.set(k, name);
-            let house = data.list.map(h => {
-                let date = new Date(h.date),
-                    dateStr = dateComm.formatYMD(date);
-                dateSet.add(dateStr);
-                return {
-                    src,
-                    k,
-                    name,
-                    "hk": h.key ? `${src}-${h.key}` : null,
-                    "a": h.area,
-                    "t": h.totalprice,
-                    "u": h.unitprice,
-                    "d": dateStr
-                }
-            });
-            HouseList = HouseList.concat(house);
-        });
-
-        Object.keys(json).map(k => {
-            if (json[k].trend) {
-                let arr = json[k].trend.community;
-                let t = {};
-                arr.forEach(obj => {
-                    Object.entries(obj).forEach(ct => {
-                        t[ct[0]] = ct[1];
-                    })
-                });
-                Trend.set(`${src}-${k}`,{
-                    src,
-                    k,
-                    t
-                });
-            }
+function readList(src) {
+    let url = path.resolve(__dirname, `../${src}/data/list.json`);
+    let txt = fs.readFileSync(url, 'utf-8'),
+        list = JSON.parse(txt);
+    list.forEach(h => {
+        commMap.set(h.k, h.name);
+        let date = new Date(h.d),
+            dateStr = dateComm.formatYMD(date);
+        dateSet.add(dateStr);
+        HouseList.push({
+            src,
+            k: h.k,
+            name: h.name,
+            a: h.a,
+            t: h.t,
+            u: h.u,
+            d: dateStr
         });
     });
-    
 }
+function readTrend(src) {
+    let url = path.resolve(__dirname, `../${src}/data/trend.json`);
+    let txt = fs.readFileSync(url, 'utf-8'),
+        json = JSON.parse(txt);
+    Object.keys(json).map(k => {
+        let arr = json[k].community;
+        let t = {};
+        arr.forEach(obj => {
+            Object.entries(obj).forEach(ct => {
+                t[ct[0]] = ct[1];
+            })
+        });
+        Trend.set(`${src}-${k}`, {
+            src,
+            k,
+            t
+        });
+    });
+}
+
 function filterHouseList() {
     let list = [],
         s = new Set();
@@ -83,12 +75,15 @@ function filterHouseList() {
     return list;
 }
 function readHouseList() {
-    Object.keys(SOURCE).forEach(readHouseData);
+    Object.keys(SOURCE).forEach(src => {
+        readList(src);
+        readTrend(src);
+    });
     let houseList = filterHouseList(),
         commArr = Array.from(commMap),
         dateArr = Array.from(dateSet);
     return {
-        houseList, commArr, dateArr, source: SOURCE, trend: Array.from(Trend).map(m=>m[1])
+        houseList, commArr, dateArr, source: SOURCE, trend: Array.from(Trend).map(m => m[1])
     }
 }
 module.exports = readHouseList;
