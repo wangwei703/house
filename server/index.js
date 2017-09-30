@@ -7,7 +7,7 @@ const calcHome = require("./stat/calc_for_home");
 const calcQuantity = require("./stat/calc_quantity");
 const calcAvg4Mob = require("./stat/calc_avg4mob");
 const write = require("./stat/write");
-let { houseList, commArr, dateArr, source, trend } = readHouseList();
+let { allHouseList, houseList, commArr, dateArr, source, trend } = readHouseList();
 
 dateArr.sort((d1, d2) => d1 > d2 ? 1 : (d1 < d2 ? -1 : 0));
 let result;
@@ -22,6 +22,12 @@ write("home", result);
 
 result = calcAvg4Mob(houseList, commArr, dateArr, source, trend);
 write("data", result, true);
+write("list", {
+    list: allHouseList,
+    source,
+    date: dateArr,
+    monthtrend: trend
+}, true);
 
 result = groupList(houseList, commArr, dateArr, source);
 write("list", result);

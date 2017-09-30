@@ -3,8 +3,8 @@ const path = require("path");
 const dateComm = require("./date");
 const SOURCE = { "ajk": "安居客", "fccs": "房产超市" };
 const PRICELIMIT = {
-    "zgtjgjc-hcy": [12000, 22000],
-    "jntyc": [10000, 17000],
+    "zgtjgjc-hcy": [14000, 18000],
+    "jntyc": [10000, 15000],
     "hrhy": [10000, 20000],
     "jy-dfds": [10000, 20000]
 }
@@ -27,6 +27,7 @@ function readList(src) {
         HouseList.push({
             src,
             k: h.k,
+            id: h.id,
             name: h.name,
             a: h.a,
             t: h.t,
@@ -56,34 +57,72 @@ function readTrend(src) {
 }
 
 function filterHouseList() {
-    let list = [],
+    let allHouseList = [],
+        houseList = [],
         s = new Set();
-    //剔除价格异常的房源
-    HouseList = HouseList.filter(h => h.u >= PRICELIMIT[h.k][0] && h.u <= PRICELIMIT[h.k][1]);
-    //剔除重复抓取的房源
+
+    //剔除重复房源,id&&date
     HouseList.forEach(h => {
-        if (h.hk) {
-            let kk = `${h.d}-${h.hk}`;
-            if (!s.has(kk)) {
-                list.push(h);
-                s.add(kk);
+        let id = h.id;
+        if (id) {
+            if (!s.has(id)) {
+                allHouseList.push(h);
+                s.add(id);
             }
         } else {
-            list.push(h);
+            allHouseList.push(h);
         }
     });
-    return list;
+    //剔除价格异常的房源
+    houseList = allHouseList.filter(h => h.u >= PRICELIMIT[h.k][0] && h.u <= PRICELIMIT[h.k][1]);
+    return { allHouseList, houseList };
+}
+function formatAllHouseList(list, comm, date, source) {
+    let sourceArr = Object.entries(source);//[ [ 'ajk', '安居客' ], [ 'fccs', '房产超市' ] ]
+    let commList = [];
+    comm.forEach(c => {
+        let dateList = [];
+        date.forEach(d => {
+            let sourceList = [];
+            sourceArr.forEach(s => {
+                //console.log(s[0],d,c)
+                let l = list.filter(h => h.src === s[0] && h.d === d && h.k === c[0]).map(h => (
+                    [
+                        h.u,
+                        h.a
+                    ]
+                ));
+                sourceList.push({
+                    k: s[0],
+                    n: s[1],
+                    l
+                });
+            });
+            dateList.push({
+                d,
+                l: sourceList
+            });
+        });
+        commList.push({
+            k: c[0],
+            n: c[1],
+            l: dateList
+        });
+    });
+
+    return commList;
 }
 function readHouseList() {
     Object.keys(SOURCE).forEach(src => {
         readList(src);
         readTrend(src);
     });
-    let houseList = filterHouseList(),
+    let { allHouseList, houseList } = filterHouseList(),
         commArr = Array.from(commMap),
         dateArr = Array.from(dateSet);
+    allHouseList = formatAllHouseList(allHouseList, commArr, dateArr, SOURCE);
     return {
-        houseList, commArr, dateArr, source: SOURCE, trend: Array.from(Trend).map(m => m[1])
+        allHouseList, houseList, commArr, dateArr, source: SOURCE, trend: Array.from(Trend).map(m => m[1])
     }
 }
 module.exports = readHouseList;

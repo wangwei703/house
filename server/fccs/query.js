@@ -106,7 +106,7 @@ class Query {
         let list = [];
         console.group(this.house.name);
         console.group("查找近期发布房源：");
-        for (let i = 1; i < 200; i++) {
+        for (let i = 1; i < 300; i++) {
             try {
                 console.log(`${getTime()}\t第 ${i} 页`);
                 let data = await this.fetchHouseList(i === 1 ? null : i);
