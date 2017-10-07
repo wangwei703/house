@@ -115,6 +115,9 @@ class Query {
                 if (e.code === 'ETIMEDOUT') {
                     i--;
                     console.log("timeout try again!");
+                } else if (e.code === 'ECONNRESET') {
+                    i--;
+                    console.log("ECONNRESET try again!");
                 } else {
                     console.log("complete!", e);
                     break;
@@ -133,7 +136,7 @@ class Query {
                 trend = await this.fetchPricetrend();
                 break;
             } catch (e) {
-                if (e.code === 'ETIMEDOUT') {
+                if (e.code === 'ETIMEDOUT' || e.code === 'ECONNRESET') {
                     console.log("timeout try again!");
                 }
             };
